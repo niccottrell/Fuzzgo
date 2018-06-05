@@ -27,12 +27,12 @@ def damage_term(word):
 
 connection_string = "mongodb://localhost"
 connection = pymongo.MongoClient(connection_string)#
-connection.drop_database('people');
+connection.drop_database('people')
 database = connection.people
 
 
-database.nominals_v2.drop();
-database.nominals_v2_vocab.drop();
+database.nominals_v2.drop()
+database.nominals_v2_vocab.drop()
 #Need this index up front
 database.nominals_v2_names.ensure_index([("p",pymongo.ASCENDING),
                                          ("_id",pymongo.ASCENDING)],unique=True)   
@@ -41,9 +41,9 @@ database.nominals_v2_names.ensure_index([("p",pymongo.ASCENDING),
 males = open('male.txt').read().splitlines()
 females = open('female.txt').read().splitlines()
 lasts = open('last.txt').read().splitlines()
-postcodes = open("psmall.csv").read().splitlines();
-streets = open("streets.csv").read().splitlines();
-stdcodes = open("stdcodes.txt").read().splitlines();
+postcodes = open("psmall.csv").read().splitlines()
+streets = open("streets.csv").read().splitlines()
+stdcodes = open("stdcodes.txt").read().splitlines()
 
 
 for x in xrange(1,1000):
@@ -54,7 +54,7 @@ for x in xrange(1,1000):
         lastname=None
         middleone=None
         middletwo=None
-        lastname =  choice(lasts).partition(' ')[0]
+        lastname = choice(lasts).partition(' ')[0]
         lastname = damage_term(lastname)
         gender = random.randint(0,1)
 
@@ -88,27 +88,23 @@ for x in xrange(1,1000):
         postcode = parts[0]
         lat = parts[1]
         lon = parts[2]
-        town = parts[13].partition(' ')[0].replace('"','');
-        county = parts[6].replace(' County','').replace('"','');
+        town = parts[13].partition(' ')[0].replace('"','')
+        county = parts[6].replace(' County','').replace('"','')
         
         #print postcode + "," + lat + "," + lon + "," + town + "," + county
         
         street = choice(streets)
         streetno = random.randint(1,200)
-        streettype = choice(["Rd.","Road","Ln.","Lane","Crescent","St.","Street"]);
-        
-   
-        
+        streettype = choice(["Rd.","Road","Ln.","Lane","Crescent","St.","Street"])
+
         stdcode = choice(stdcodes)
-        phoneshort = random.randint(200000,8900000);
+        phoneshort = random.randint(200000,8900000)
         phoneno =  stdcode  + str(phoneshort)
         
-        mobile = random.randint(000000000,999999999);
+        mobile = random.randint(000000000,999999999)
         mobileno = "07"+str(mobile)
-        
-        
+
         address = str(streetno) + " " + street + " " + streettype + ", "+ town + ", " + county
-        
 
         metafirstname = soundslike(firstname)
         metalastname = soundslike(lastname)
@@ -159,19 +155,15 @@ for x in xrange(1,1000):
             names.append({ "_id" : middletwo ,
                         "p" : [middletwo[0],middletwo[1]] }) 
             
-    
-        
-            
-    database.nominals_v2.insert(records);
+
+    database.nominals_v2.insert(records)
     
     try:            
         database.nominals_v2_names.insert(names,continue_on_error=True) # This WILL fail a lot - thats the idea could upsert and count!
     except pymongo.errors.DuplicateKeyError:
         pass
     
-   
-    
-    
+
     print x * 5000
 
 database.nominals_v2.ensure_index([("firstname",pymongo.ASCENDING)])
@@ -188,8 +180,6 @@ database.nominals_v2.ensure_index([("metamiddletwo",pymongo.ASCENDING)])
 
 database.nominals_v2.ensure_index([("allnames",pymongo.ASCENDING)])   
 database.nominals_v2.ensure_index([("allmetanames",pymongo.ASCENDING)])   
-
-
 
 #What if we want to extend it out!
 

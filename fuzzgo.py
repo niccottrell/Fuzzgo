@@ -6,7 +6,6 @@ Created on Aug 25, 2013
 '''
 
 
-from bson import Binary, Code
 from bson.json_util import dumps
 import json
 import  re
@@ -132,20 +131,20 @@ def search_simple():
             for fieldname in fieldnames:
                 if fieldname in queryfields:
                     orvals.append({queryfields[fieldname]:queryterms[fieldname]})
-                query["$or"] = orvals;
+                query["$or"] = orvals
         else:
             #Run an aggregation Query - then a query by ID
             for fieldname in fieldnames:
                 if fieldname in queryfields:
                     orvals.append({queryfields[fieldname]:queryterms[fieldname]})
-                    query["$or"] = orvals;
+                    query["$or"] = orvals
             
             #Match on the OR of the fields - parallel - individual indexes
             #Project a score by adding one for each match
             #Convert each field to a aggregation boolean term {$eq:[a,b]}
             
             if anyfield != "true":
-                innermatches=[];
+                innermatches=[]
                 for fieldname in fieldnames:
                     if fieldname in queryfields:
                         #If queryterms[fieldname] is a $in clause we need a different model
@@ -172,7 +171,7 @@ def search_simple():
                 
             else :
                 
-                innermatches=[];
+                innermatches=[]
                 for fieldname in fieldnames:
                     if fieldname in queryfields:
                         #If queryterms[fieldname] is a $in clause we need a different model
@@ -207,9 +206,9 @@ def search_simple():
                 
             print dumps(counts)
             if len(counts["result"]) <1:
-                query["$or"] = [{"_id":"xyzzyzzy"}]; #Quick hack for demo
+                query["$or"] = [{"_id":"xyzzyzzy"}] #Quick hack for demo
             else:    
-                query["$or"] = counts["result"];
+                query["$or"] = counts["result"]
  
                 
    

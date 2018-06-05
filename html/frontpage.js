@@ -22,15 +22,15 @@ function FrontpageCtrl($scope,$http) {
 	 params["permute"]=$scope.permute;
 	 params["nmatch"]=$scope.nmatch;
 	 params["anyfield"]=$scope.anyfield;
-	 
-	
-	 
+
+
 	  $http.get('search/simple',{"params":params}).success(function(data) {
-		  	$scope.results= data.results;
-		  	$scope.explainplan = data.explain;
-		  	efval = (100 * data.explain.n)/ data.explain.nscanned;
+		  	$scope.results = data.results;
+		  	$scope.explainplan.n = data.explain.executionStats.nReturned;
+		  	efval = (100 * $scope.explainplan.n) / data.explain.executionStats.totalDocsExamined;
 		  	efval = Math.round(efval * 1000)/1000;
 		  	$scope.explainplan.efficiency = efval;
+		  	$scope.explainplan.millis = data.explain.executionStats.executionTimeMillis;
 		  	$scope.isSearching = false;
 		  	$scope.hasResults = true;
 		  });
